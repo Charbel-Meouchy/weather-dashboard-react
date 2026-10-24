@@ -8,6 +8,7 @@ import WeatherCard from './components/WeatherCard.jsx';
 import ForecastList from './components/ForecastList.jsx';
 import { useWeather } from './hooks/useWeather.js';
 import { useLocalStorage } from './hooks/useLocalStorage.js';
+import './App.css';
 
 const DEFAULT_CITY = 'Beirut';
 const MAX_RECENT = 5;
