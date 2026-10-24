@@ -1,17 +1,17 @@
 const GEOCODING_URL = 'https://geocoding-api.open-meteo.com/v1/search';
 const FORECAST_URL = 'https://api.open-meteo.com/v1/forecast';
 
-async function getJson(url, signal) {
-  const response = await fetch(url, { signal });
+async function getJson(url) {
+  const response = await fetch(url);
   if (!response.ok) {
     throw new Error(`Request failed (${response.status}). Please try again.`);
   }
   return response.json();
 }
 
-async function findCity(name, signal) {
+async function findCity(name) {
   const params = new URLSearchParams({ name, count: '1', language: 'en', format: 'json' });
-  const data = await getJson(`${GEOCODING_URL}?${params}`, signal);
+  const data = await getJson(`${GEOCODING_URL}?${params}`);
 
   if (!data.results || data.results.length === 0) {
     throw new Error(`No city found for "${name}". Check the spelling and try again.`);
@@ -21,7 +21,7 @@ async function findCity(name, signal) {
   return { name: cityName, country, latitude, longitude };
 }
 
-async function getForecast({ latitude, longitude }, signal) {
+async function getForecast({ latitude, longitude }) {
   const params = new URLSearchParams({
     latitude,
     longitude,
@@ -30,12 +30,12 @@ async function getForecast({ latitude, longitude }, signal) {
     timezone: 'auto',
     forecast_days: '7',
   });
-  return getJson(`${FORECAST_URL}?${params}`, signal);
+  return getJson(`${FORECAST_URL}?${params}`);
 }
 
-export async function fetchWeather(cityName, signal) {
-  const location = await findCity(cityName, signal);
-  const forecast = await getForecast(location, signal);
+export async function fetchWeather(cityName) {
+  const location = await findCity(cityName);
+  const forecast = await getForecast(location);
 
   return {
     location,
